@@ -16,7 +16,7 @@ class Entities {
         if (!options.where) {
             return this.data[0];
         }
-        return this.data.find(element => checkWhereClause(element, options));
+        return this.data.find(element => this.checkWhereClause(element, options));
     }
 
     async create(element) {
