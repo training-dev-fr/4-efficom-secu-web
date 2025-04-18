@@ -9,7 +9,10 @@ class Entities {
     }
 
     async findAll(predicate) {
-        return this.data;
+        if (!options.where) {
+            return this.data[0];
+        }
+        return this.data.filter(element => this.checkWhereClause(element, options));
     }
 
     async findOne(options) {
@@ -51,8 +54,11 @@ class Entities {
         return element;
     }
 
-    async destroy(predicate) {
-
+    async destroy(options) {
+        let count = this.data.length;
+        this.data = this.data.filter(element => !this.checkWhereClause(element, options));
+        this.save();
+        return count - this.data.length;
     }
 
     checkWhereClause(element, options) {
