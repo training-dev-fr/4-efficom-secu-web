@@ -1,4 +1,4 @@
-let bdd = require('./../framework/connection.js');
+let {bdd} = require('./../framework/connection.js');
 const {DataTypes} = require('sequelize');
 
 let Product = bdd.define('product',{
