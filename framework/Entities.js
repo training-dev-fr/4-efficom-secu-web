@@ -8,9 +8,9 @@ class Entities {
         this.currentId = this.data.length > 0 ? Math.max(...this.data.map(u => u.id)) : 0;
     }
 
-    async findAll(predicate) {
-        if (!options.where) {
-            return this.data[0];
+    async findAll(options) {
+        if (!options?.where) {
+            return this.data;
         }
         return this.data.filter(element => this.checkWhereClause(element, options));
     }

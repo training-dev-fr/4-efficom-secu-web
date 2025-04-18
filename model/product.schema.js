@@ -1,14 +1,15 @@
 let orm = require('./../framework/orm.js');
+const {DataTypes} = require('./../framework/DataTypes.js');
 
 let Product = orm.define('product',{
     name: {
-        type: "string"
+        type: DataTypes.STRING(255)
     },
     description: {
-        type: "string"
+        type: DataTypes.STRING(255)
     },
     price: {
-        type: "number"
+        type: DataTypes.DECIMAL(10,2)
     }
 });
 

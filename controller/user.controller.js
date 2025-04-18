@@ -32,24 +32,18 @@ const create = async (req, res) => {
         });
         return res.status(201).json(user);
     } catch (e) {
-        return res.status(400).json({error :e.message});
+        return res.status(400).json({ error: e.message });
     }
 }
 
 const update = async (req, res) => {
-    let userToUpdate = {};
     try {
-        if (req.body.email) {
-            userToUpdate.email = req.body.email;
-        }
-        if (userToUpdate.password) {
-            userToUpdate.password = bcrypt.hashSync(userToUpdate.password, 10);
-        }
+        req.body.password = bcrypt.hashSync(req.body.password, 10)
     } catch (e) {
-        return res.status(400).json({ error: "problème lors de la sécurisation du mot de passe" });
+        return res.status(400).json({ error: "Error: cannot generate hash for password" });
     }
     try {
-        const user = await User.updateOne(userToUpdate, {
+        const user = await User.updateOne(req.body, {
             where: {
                 id: req.params.id
             }
@@ -61,7 +55,15 @@ const update = async (req, res) => {
 }
 
 const remove = async (req, res) => {
-
+    let result = await User.destroy({
+        where: {
+            id: req.params.id
+        }
+    });
+    if (result !== 1) {
+        res.status(404).json({ error: "User not found" });
+    }
+    return res.status(204).json({ message: "User deleted" });
 }
 
 module.exports = { getAll, getById, create, update, remove };
