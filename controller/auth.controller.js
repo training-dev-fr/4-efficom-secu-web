@@ -1,6 +1,7 @@
 const User = require('./../model/user.schema.js');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 const signin = async (req, res) => {
     try {
@@ -27,7 +28,7 @@ const login = async (req, res) => {
         email: user.email,
         token: jwt.sign({
             id: user.id
-        },"bWEgY2zDqSBqd3QgdWx0cmEgc8Opc3VyaXPDqWUgIQ==")
+        },process.env.JWT_KEY)
     });
 }
 

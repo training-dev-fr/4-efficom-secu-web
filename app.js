@@ -2,9 +2,14 @@ const express = require('express');
 const userRouter = require('./route/user.route.js');
 const productRouter = require('./route/product.route.js');
 const authRouter = require('./route/auth.route.js');
+const {connect} = require('./framework/connection.js');
 
 const app = express();
 
+const database = async () => {
+    await connect();
+}
+database();
 app.use(express.json());
 
 app.use('/user',userRouter);

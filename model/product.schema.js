@@ -1,7 +1,7 @@
-let orm = require('./../framework/orm.js');
-const {DataTypes} = require('./../framework/DataTypes.js');
+let Sequelize = require('sequelize');
+const {DataTypes} = require('sequelize');
 
-let Product = orm.define('product',{
+let Product = Sequelize.define('product',{
     name: {
         type: DataTypes.STRING(255)
     },
