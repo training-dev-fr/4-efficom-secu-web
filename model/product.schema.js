@@ -1,7 +1,7 @@
-let Sequelize = require('sequelize');
+let bdd = require('./../framework/connection.js');
 const {DataTypes} = require('sequelize');
 
-let Product = Sequelize.define('product',{
+let Product = bdd.define('product',{
     name: {
         type: DataTypes.STRING(255)
     },

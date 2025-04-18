@@ -1,7 +1,7 @@
-let Sequelize = require('sequelize');
+let bdd = require('./../framework/connection.js');
 const {DataTypes} = require('sequelize');
 
-let User = Sequelize.define('user',{
+let User = bdd.define('user',{
     email: {
         type: DataTypes.STRING(255),
         unique: true
