@@ -66,4 +66,10 @@ const remove = async (req, res) => {
     productToUpdate.destroy();
 }
 
+const removeAdmin = async (req, res) => {
+    let productToUpdate = await Product.findOne({where:{id: req.params.id}});
+
+    productToUpdate.destroy();
+}
+
 module.exports = { getAll, getById, create, update, remove };
