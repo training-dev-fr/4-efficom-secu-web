@@ -22,17 +22,24 @@ const create = async (req, res) => {
         const product = await Product.create({
             name: req.body.name,
             description: req.body.description,
-            price: req.body.price
+            price: req.body.price,
+            userId: req.payload.id
         });
         return res.status(201).json(product);
     } catch (e) {
-        return res.status(400).json({ error: "problème lors de la sécurisation du mot de passe" });
+        return res.status(400).json({ error: "Cannot create product" });
     }
 }
 
 const update = async (req, res) => {
-    let productToUpdate = {};
+
+
     try {
+        let productToUpdate = await Product.findOne({where:{id: req.params.id}});
+
+        if(productToUpdate.userId !== req.payload.id){
+            res.status(403).json({error: "You cannot change this product"});
+        }
         if(req.body.name){
             productToUpdate.name = req.body.name;
         }
@@ -42,15 +49,7 @@ const update = async (req, res) => {
         if(req.body.price){
             productToUpdate.price = req.body.price;
         }
-    } catch (e) {
-        return res.status(400).json({ error: "problème lors de la sécurisation du mot de passe" });
-    }
-    try {
-        const product = await Product.updateOne(productToUpdate, {
-            where: {
-                id: req.params.id
-            }
-        });
+        productToUpdate.save();
         return res.status(201).json(product);
     } catch (e) {
         return res.status(404).json(e.message);
@@ -58,7 +57,13 @@ const update = async (req, res) => {
 }
 
 const remove = async (req, res) => {
+    let productToUpdate = await Product.findOne({where:{id: req.params.id}});
 
+    if(productToUpdate.userId !== req.payload.id){
+        res.status(403).json({error: "You cannot change this product"});
+    }
+
+    productToUpdate.destroy();
 }
 
 module.exports = { getAll, getById, create, update, remove };

@@ -16,7 +16,7 @@ const signin = async (req, res) => {
 }
 
 const login = async (req, res) => {
-    const user = User.findOne({where: {email: req.body.email}});
+    const user = await User.findOne({where: {email: req.body.email}});
     if(!user){
         return res.status(404).json({error: "Email ou mot de passe incorrect"})
     }
