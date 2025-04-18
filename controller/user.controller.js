@@ -19,21 +19,27 @@ const getById = async (req, res) => {
 }
 
 const create = async (req, res) => {
+    let hash = null;
+    try {
+        hash = bcrypt.hashSync(req.body.password, 10)
+    } catch (e) {
+        return res.status(400).json({ error: "Error: cannot generate hash for password" });
+    }
     try {
         const user = await User.create({
             email: req.body.email,
-            password: bcrypt.hashSync(req.body.password, 10)
+            password: hash
         });
         return res.status(201).json(user);
     } catch (e) {
-        return res.status(400).json({ error: "problème lors de la sécurisation du mot de passe" });
+        return res.status(400).json({error :e.message});
     }
 }
 
 const update = async (req, res) => {
     let userToUpdate = {};
     try {
-        if(req.body.email){
+        if (req.body.email) {
             userToUpdate.email = req.body.email;
         }
         if (userToUpdate.password) {

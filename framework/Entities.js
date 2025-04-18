@@ -21,7 +21,7 @@ class Entities {
 
     async create(element) {
         try {
-            this.checkFormat(element);
+            await this.checkFormat(element);
         } catch (e) {
             throw e;
         }
@@ -36,7 +36,7 @@ class Entities {
 
     async updateOne(dataToUpdate, options) {
         try {
-            this.checkFormat(dataToUpdate);
+            await this.checkFormat(dataToUpdate);
         } catch (e) {
             throw e;
         }
@@ -70,7 +70,7 @@ class Entities {
         fs.writeFileSync('./data/' + this.collection + '.json', JSON.stringify(this.data));
     }
 
-    checkFormat(dataToCheck) {
+    async checkFormat(dataToCheck) {
         for (let [property, value] of Object.entries(dataToCheck)) {
             if (!this.schema[property]) {
                 throw new Error("Error: property " + property + " does not exist on " + this.collection);
@@ -82,6 +82,23 @@ class Entities {
                     throw new Error("Error: property " + property + " must be of type " + options.type);
                 }
             }
+            if(options.unique){
+                if(!await this.checkUnique(property,dataToCheck[property])){
+                    throw new Error("Error: property " + property + " must be unique");
+                }
+            }
+        }
+        return true;
+    }
+
+    async checkUnique(field,value){
+        let obj = {};
+        obj[field] = value;
+        let element = await this.findOne({
+            where: obj
+        });
+        if(element){
+            return false;
         }
         return true;
     }
