@@ -8,9 +8,9 @@ const log = (req, res, next) => {
     logString.push(req.ip);
     logString.push("\n Content-Type:", req.headers["content-type"]);
     if (req.body) {
-        if(req.body.password){
-            req.body.password = "********";
-        }
+        // if(req.body.password){
+        //     req.body.password = "********";
+        // }
         logString.push("\n ", JSON.stringify(req.body));
     }
     fs.appendFileSync(LOG_FILE,logString.join(" ") + "\n");

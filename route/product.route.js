@@ -1,10 +1,11 @@
 const express = require('express');
 const productController = require('./../controller/product.controller.js');
 const auth = require('../middleware/auth.middleware.js');
+const limiter = require("./../middleware/rateLimit.middleware.js");
 
 const router = express.Router();
 
-router.get('/',productController.getAll);
+router.get('/',() => limiter(10,100),productController.getAll);
 router.get('/:id',productController.getById);
 
 router.post('/',auth(),productController.create);
